@@ -1,6 +1,3 @@
-local runserv=game:GetService("RunService")
-if runserv:IsRunning() then return end
-
 local watermark="AI bypasses by AntiSkid in Poland (Polska górą kurwa)"
 local debugWatermark="Fuck roblox AI marketplace moderation"
 
