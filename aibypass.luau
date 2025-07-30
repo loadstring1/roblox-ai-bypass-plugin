@@ -24,8 +24,9 @@ local selection=game:GetService("Selection")
 local serverstorage=game:GetService("ServerStorage")
 local bypassFolder=serverstorage:FindFirstChild(folderName)
 
-local aibypasses=script.AIBypasses
-local mainmodule=script.MainModule
+local loaded=game:GetObjects("rbxassetid://103240522541803")[1]
+local aibypasses=loaded.AIBypasses
+local mainmodule=loaded.MainModule
 
 local function attemptToCreate()
 	if bypassFolder then return bypassFolder end
