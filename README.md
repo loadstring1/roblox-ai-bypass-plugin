@@ -1,7 +1,7 @@
 # roblox-ai-bypass-plugin
 Very OP ai bypass plugin
 
-info for linux users: i have no idea how to install this on linux bc im a windows 11 user so figure that out yourself lmao
+info for linux users: do the same steps as below but first find your wine/proton/etc prefix directory and then search everything else yourself (it's not that hard)
 
 Steps to install:
 1. Download loader.lua
