@@ -2,7 +2,7 @@ local watermark="AI bypasses by AntiSkid in Poland (Polska górą kurwa)"
 local debugWatermark="Fuck roblox AI marketplace moderation"
 
 local folderName="AI bypass (fuck roblox AI marketplace moderation)"
-local versionn="1.0"
+local versionn="1.1"
 local AIBad="rbxassetid://18445864303"
 
 local selection=game:GetService("Selection")
@@ -27,14 +27,10 @@ local toolbar = plugin:CreateToolbar(watermark)
 
 local buttons={
 	Bypass1=toolbar:CreateButton(
-		"Bypass 1 (heavy)",
+		"Bypass 1 (light) (NEW)",
 		watermark,
-		AIBad),
-
-	Bypass2=toolbar:CreateButton(
-		"Bypass 2 (light)",
-		watermark,
-		AIBad),	
+		AIBad
+	)
 }::{[string]:PluginToolbarButton}
 
 
