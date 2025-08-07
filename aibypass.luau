@@ -2,7 +2,7 @@ local watermark="AI bypasses by AntiSkid in Poland (Polska górą kurwa)"
 local debugWatermark="Fuck roblox AI marketplace moderation"
 
 local folderName="AI bypass (fuck roblox AI marketplace moderation)"
-local versionn="1.1"
+local versionn="1.2"
 local AIBad="rbxassetid://18445864303"
 
 local selection=game:GetService("Selection")
@@ -27,7 +27,7 @@ local toolbar = plugin:CreateToolbar(watermark)
 
 local buttons={
 	Bypass1=toolbar:CreateButton(
-		"Bypass 1 (light) (NEW)",
+		"Bypass 1 (heavy)",
 		watermark,
 		AIBad
 	)
@@ -60,7 +60,10 @@ for i,v in buttons do
 			local main=mainmodule:Clone()
 			local shit=realBypass:Clone()
 			local toparent=shit:FindFirstChild("toparent",true)
-			if toparent==nil then main:Destroy() shit:Destroy() warn(`unable to find toparent in {i} bypass - {debugWatermark}`) return end
+			
+			if toparent==nil then 
+				toparent=shit
+			end
 
 			shit.Name=""
 			toparent.Name=toparent.ClassName
