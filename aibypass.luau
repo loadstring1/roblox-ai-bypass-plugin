@@ -1,8 +1,8 @@
-local watermark="AI bypasses by AntiSkid in Poland (Polska górą kurwa)"
+local watermark="AI bypass plugin by AntiSkid (made in Poland)"
 local debugWatermark="Fuck roblox AI marketplace moderation"
 
 local folderName="AI bypass (fuck roblox AI marketplace moderation)"
-local versionn="1.2"
+local versionn="1.3"
 local AIBad="rbxassetid://18445864303"
 
 local selection=game:GetService("Selection")
@@ -25,13 +25,7 @@ end
 local aibypasses=loaded.AIBypasses
 local toolbar = plugin:CreateToolbar(watermark)
 
-local buttons={
-	Bypass1=toolbar:CreateButton(
-		"Bypass 1 (heavy)",
-		watermark,
-		AIBad
-	)
-}::{[string]:PluginToolbarButton}
+local buttons={}::{[string]:PluginToolbarButton}
 
 
 local function attemptToCreate()
@@ -44,6 +38,10 @@ local function attemptToCreate()
 	return bypassFolder
 end
 
+for i,v in aibypasses:GetChildren() do
+	buttons[v.Name]=toolbar:CreateButton(v.Name,watermark,AIBad)
+end
+
 for i,v in buttons do
 	local realBypass=aibypasses:FindFirstChild(i)
 	if realBypass==nil then warn(i,`bypass doesn't exist - {debugWatermark}`) continue end
@@ -53,9 +51,20 @@ for i,v in buttons do
 		v.Enabled=false
 		v:SetActive(false)
 		v.Enabled=true
-
+		
+		local loadMe=realBypass:GetAttribute("loadme")
+		local toSet={}
+		
 		for _,mod in selection:Get() do
 			if mod.ClassName~="ModuleScript" then continue end
+			
+			if loadMe then
+				table.insert(toSet,loadstring(realBypass.Source)({
+					attemptToCreate=attemptToCreate,
+					mod=mod,
+				}))
+				continue
+			end
 
 			local main=mainmodule:Clone()
 			local shit=realBypass:Clone()
@@ -71,9 +80,17 @@ for i,v in buttons do
 			shit.Parent=main
 			mod:Clone().Parent=toparent
 			main.Parent=attemptToCreate()
+			table.insert(toSet,main)
 
 			print("Successfully bypassed",mod.Name)
 		end
+		
+		if #toSet<1 then
+			return
+		end
+		
+		selection:Set(toSet)
+		plugin:SaveSelectedToRoblox()
 	end)	
 end
 
