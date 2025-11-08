@@ -42,7 +42,7 @@ success,loaded=pcall(function()
 end)
 
 if success==false then
-	warn(`Failed to load AIBypasses with GetObjects. - {debugWatermark}\nError Message:{typeof(loaded)=="string" and loaded or "error unknown because pcall didn't return string."}`)
+	warn(`Failed to load AIBypasses with SerializationService. - {debugWatermark}\nError Message:{typeof(loaded)=="string" and loaded or "error unknown because pcall didn't return string."}`)
 	return
 end
 
