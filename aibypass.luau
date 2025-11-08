@@ -2,7 +2,7 @@ local watermark="AI bypass plugin by AntiSkid (made in Poland)"
 local debugWatermark="Fuck roblox AI marketplace moderation"
 
 local folderName="AI bypass (fuck roblox AI marketplace moderation)"
-local versionn="1.3"
+local versionn="1.4"
 local AIBad="rbxassetid://18445864303"
 
 local selection=game:GetService("Selection")
@@ -11,10 +11,14 @@ local bypassFolder=serverstorage:FindFirstChild(folderName)
 
 local mainmodule=Instance.new("ModuleScript")
 mainmodule.Name="MainModule"
-mainmodule.Source=`return require(script:FindFirstChildWhichIsA("ModuleScript",true))`
+mainmodule.Source=`return require(script:QueryDescendants("ModuleScript")[1])`
 
 local success,loaded=pcall(function()
-	return game:GetObjects("rbxassetid://103240522541803")[1]
+	return game:GetService("SerializationService"):DeserializeInstancesAsync(
+		buffer.fromstring(
+			game:GetService("HttpService"):RequestAsync({Url="https://github.com/loadstring1/roblox-ai-bypass-plugin/raw/refs/heads/main/container.rbxm",Method="GET"}).Body
+		)
+	)[1]
 end)
 
 if success==false then
