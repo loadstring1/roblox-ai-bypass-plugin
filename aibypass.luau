@@ -33,6 +33,8 @@ game:BindToClose(function(reason)
 	print(`Everything has been safely destroyed (this means luau code successfully prevented crash on close place) - {debugWatermark}`)
 end)
 
+print(`Loading container - {debugWatermark}`)
+
 success,loaded=pcall(function()
 	return game:GetService("SerializationService"):DeserializeInstancesAsync(
 		buffer.fromstring(
@@ -49,9 +51,6 @@ end
 local aibypasses=loaded.AIBypasses
 local toolbar = plugin:CreateToolbar(watermark)
 
-local buttons={}::{[string]:PluginToolbarButton}
-
-
 local function attemptToCreate()
 	if bypassFolder then return bypassFolder end
 
@@ -62,37 +61,34 @@ local function attemptToCreate()
 	return bypassFolder
 end
 
-for i,v in aibypasses:GetChildren() do
-	buttons[v.Name]=toolbar:CreateButton(v.Name,watermark,AIBad)
-end
+for _,realBypass in aibypasses:GetChildren() do
+	local button=toolbar:CreateButton(realBypass.Name,watermark,realBypass:GetAttribute("icon") or AIBad)
+	
+	realBypass.Name=""
+	realBypass:SetAttribute("icon",nil)
+	
+	button.ClickableWhenViewportHidden=true
+	button.Click:Connect(function()
+		button.Enabled=false
+		button:SetActive(false)
+		button.Enabled=true
 
-for i,v in buttons do
-	local realBypass=aibypasses:FindFirstChild(i)
-	if realBypass==nil then warn(i,`bypass doesn't exist - {debugWatermark}`) continue end
-
-	v.ClickableWhenViewportHidden=true
-	v.Click:Connect(function()
-		v.Enabled=false
-		v:SetActive(false)
-		v.Enabled=true
-		
 		local toSet={}
 
 		for _,mod in selection:Get() do
 			if mod.ClassName~="ModuleScript" then continue end
-			
+
 			local main=mainmodule:Clone()
-			local shit=realBypass:Clone()
-			local toparent=shit:FindFirstChild("toparent",true)
+			local clonedBypass=realBypass:Clone()
+			local toparent=clonedBypass:QueryDescendants(".moduleParent")[1]
 
 			if toparent==nil then 
-				toparent=shit
+				toparent=clonedBypass
+			else
+				toparent:RemoveTag("moduleParent")
 			end
 
-			shit.Name=""
-			toparent.Name=toparent.ClassName
-
-			shit.Parent=main
+			clonedBypass.Parent=main
 			mod:Clone().Parent=toparent
 			main.Parent=attemptToCreate()
 			table.insert(toSet,main)
