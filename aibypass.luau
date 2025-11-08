@@ -75,21 +75,12 @@ for i,v in buttons do
 		v.Enabled=false
 		v:SetActive(false)
 		v.Enabled=true
-
-		local loadMe=realBypass:GetAttribute("loadme")
+		
 		local toSet={}
 
 		for _,mod in selection:Get() do
 			if mod.ClassName~="ModuleScript" then continue end
-
-			if loadMe then
-				table.insert(toSet,loadstring(realBypass.Source)({
-					attemptToCreate=attemptToCreate,
-					mod=mod,
-				}))
-				continue
-			end
-
+			
 			local main=mainmodule:Clone()
 			local shit=realBypass:Clone()
 			local toparent=shit:FindFirstChild("toparent",true)
