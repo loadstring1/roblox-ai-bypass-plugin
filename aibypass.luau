@@ -2,7 +2,7 @@ local watermark="AI bypass plugin by AntiSkid (made in Poland)"
 local debugWatermark="Fuck roblox AI marketplace moderation"
 
 local folderName="AI bypass (fuck roblox AI marketplace moderation)"
-local versionn="1.4crashfix"
+local versionn="1.5fixteam"
 local AIBad="rbxassetid://18445864303"
 
 local selection=game:GetService("Selection")
@@ -17,22 +17,24 @@ mainmodule.Source=`return require(script:QueryDescendants("ModuleScript")[1])`
 local success,loaded
 
 --weird crash fix but at least it works
-game:BindToClose(function(reason)
-	task.wait(2)
-	
-	print("bindtoclose reason:",reason)
-	print(`Its safe to destroy everything now in order to prevent stupid close place crash - {debugWatermark}`)
-	
-	if loaded then pcall(destroy,loaded) end
+local function closePlugin(reason)
+	if reason then
+		task.wait(2)
+		print("bindtoclose reason:",reason)
+		print(`Its safe to destroy everything now in order to prevent stupid close place crash - {debugWatermark}`)
+	end
+
+	pcall(destroy,loaded)
 	pcall(destroy,mainmodule)
-	
+
 	for i,v in game:GetDescendants() do
 		pcall(destroy,v)
 	end
 
 	print(`Everything has been safely destroyed (this means luau code successfully prevented crash on close place) - {debugWatermark}`)
-end)
+end
 
+pcall(game.BindToClose,game,closePlugin)
 print(`Loading container - {debugWatermark}`)
 
 success,loaded=pcall(function()
@@ -106,6 +108,7 @@ for _,realBypass in aibypasses:GetChildren() do
 end
 
 plugin.Unloading:Connect(function()
+	closePlugin()
 	print(`Unloaded successfully. - {debugWatermark} (version {versionn})`)
 end)
 
