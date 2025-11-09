@@ -18,11 +18,10 @@ local success,loaded
 
 --weird crash fix but at least it works
 local function closePlugin(reason)
-	if reason then
-		task.wait(2)
-		print("bindtoclose reason:",reason)
-		print(`Its safe to destroy everything now in order to prevent stupid close place crash - {debugWatermark}`)
-	end
+	task.wait(2)
+
+	print("bindtoclose reason:",reason)
+	print(`Its safe to destroy everything now in order to prevent stupid close place crash - {debugWatermark}`)
 
 	pcall(destroy,loaded)
 	pcall(destroy,mainmodule)
@@ -34,7 +33,7 @@ local function closePlugin(reason)
 	print(`Everything has been safely destroyed (this means luau code successfully prevented crash on close place) - {debugWatermark}`)
 end
 
-pcall(game.BindToClose,game,closePlugin)
+local isSolo=pcall(game.BindToClose,game,closePlugin)
 print(`Loading container - {debugWatermark}`)
 
 success,loaded=pcall(function()
@@ -48,6 +47,10 @@ end)
 if success==false then
 	warn(`Failed to load container with SerializationService. - {debugWatermark}\nError Message:{typeof(loaded)=="string" and loaded or "error unknown because pcall didn't return string."}`)
 	return
+end
+
+if isSolo==false then
+	loaded.Parent=script
 end
 
 local aibypasses=loaded.AIBypasses
@@ -108,7 +111,6 @@ for _,realBypass in aibypasses:GetChildren() do
 end
 
 plugin.Unloading:Connect(function()
-	closePlugin()
 	print(`Unloaded successfully. - {debugWatermark} (version {versionn})`)
 end)
 
