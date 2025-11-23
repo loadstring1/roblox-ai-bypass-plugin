@@ -2,7 +2,7 @@ local watermark="AI bypass plugin by AntiSkid (made in Poland)"
 local debugWatermark="Fuck roblox AI marketplace moderation"
 
 local folderName="AI bypass (fuck roblox AI marketplace moderation)"
-local versionn="1.6"
+local versionn="1.7"
 local AIBad="rbxassetid://18445864303"
 
 local toolbar=plugin:CreateToolbar(watermark)
@@ -13,7 +13,7 @@ local destroy=game.Destroy
 
 local mainmodule=Instance.new("ModuleScript")
 mainmodule.Name="MainModule"
-mainmodule.Source=`return require(script:FindFirstChildWhichIsA("ModuleScript",true))`
+mainmodule.Source=`local modulescript=script:FindFirstChildWhichIsA("ModuleScript",true)\nmodulescript.Parent=nil\nscript:ClearAllChildren()\nmodulescript.Parent=script\nreturn require(modulescript)`
 
 local success,loaded
 local defaultName=[[]]
