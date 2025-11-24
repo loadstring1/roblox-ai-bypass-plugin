@@ -2,7 +2,7 @@ local watermark="AI bypass plugin by AntiSkid (made in Poland)"
 local debugWatermark="Fuck roblox AI marketplace moderation"
 
 local folderName="AI bypass (fuck roblox AI marketplace moderation)"
-local versionn="1.7"
+local versionn="1.8"
 local AIBad="rbxassetid://18445864303"
 
 local toolbar=plugin:CreateToolbar(watermark)
@@ -71,7 +71,7 @@ local aibypasses=loaded.AIBypasses
 loaded.Parent=script --fixes team create studio sessions crashes
 
 local function attemptToCreate()
-	if bypassFolder then return bypassFolder end
+	if bypassFolder and bypassFolder.Parent==serverstorage then return bypassFolder end
 
 	bypassFolder=Instance.new("Folder")
 	bypassFolder.Name=folderName
@@ -120,7 +120,7 @@ for _,realBypass in aibypasses:GetChildren() do
 		end
 
 		selection:Set(toSet)
-		plugin:SaveSelectedToRoblox()
+		--plugin:SaveSelectedToRoblox()
 	end)	
 end
 
