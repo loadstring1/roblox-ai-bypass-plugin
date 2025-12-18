@@ -22,6 +22,8 @@ else
 	versionn=`{versionn}_official`	
 end
 
+print(debug.info(2,"s"))
+
 local toolbar=plugin:CreateToolbar(watermark)
 local selection=game:GetService("Selection")
 local serverstorage=game:GetService("ServerStorage")
