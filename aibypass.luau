@@ -1,9 +1,26 @@
+local coregui=game:GetService("CoreGui")
+
+if coregui:HasTag("AIBypassPluginLoaded") then
+	warn("prevented multiple instances of AI bypass plugin from loading - please uninstall second instance of this plugin to prevent lag and crashes\nofficial version can be found here: https://github.com/loadstring1/roblox-ai-bypass-plugin")
+	return
+end
+
+coregui:AddTag("AIBypassPluginLoaded")
+
 local watermark="AI bypass plugin by AntiSkid (made in Poland)"
 local debugWatermark="Fuck roblox AI marketplace moderation"
 
 local folderName="AI bypass (fuck roblox AI marketplace moderation)"
 local versionn="1.8"
 local AIBad="rbxassetid://18445864303"
+
+if string.sub(debug.info(1,"s"),1,7)~="[string" then
+	versionn=`{versionn}_unofficial`
+	warn("AI bypass plugin detected that you probably installed it from roblox's marketplace please switch to official source of this plugin.")
+	warn("you might be using unofficial/unsupported version of AI bypass plugin\nofficial version of AI bypass plugin can be found here: https://github.com/loadstring1/roblox-ai-bypass-plugin")
+else
+	versionn=`{versionn}_official`	
+end
 
 local toolbar=plugin:CreateToolbar(watermark)
 local selection=game:GetService("Selection")
@@ -125,6 +142,7 @@ for _,realBypass in aibypasses:GetChildren() do
 end
 
 plugin.Unloading:Connect(function()
+	coregui:RemoveTag("AIBypassPluginLoaded")
 	print(`Unloaded successfully. - {debugWatermark} (version {versionn})`)
 end)
 
