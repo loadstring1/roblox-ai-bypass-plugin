@@ -14,15 +14,13 @@ local folderName="AI bypass (fuck roblox AI marketplace moderation)"
 local versionn="1.8"
 local AIBad="rbxassetid://18445864303"
 
-if string.sub(debug.info(1,"s"),1,7)~="[string" then
+if string.sub(debug.info(1,"s"),1,7)~="[string" or string.sub(debug.info(2,"s"),1,5)=="cloud" then
 	versionn=`{versionn}_unofficial`
 	warn("AI bypass plugin detected that you probably installed it from roblox's marketplace please switch to official source of this plugin.")
 	warn("you might be using unofficial/unsupported version of AI bypass plugin\nofficial version of AI bypass plugin can be found here: https://github.com/loadstring1/roblox-ai-bypass-plugin")
 else
-	versionn=`{versionn}_official`	
+	versionn=`{versionn}_official`
 end
-
-print(debug.info(2,"s"))
 
 local toolbar=plugin:CreateToolbar(watermark)
 local selection=game:GetService("Selection")
