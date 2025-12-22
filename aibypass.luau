@@ -163,21 +163,17 @@ unwrapButton.Click:Connect(function()
 
 	for _,mod in selection:Get() do
 		if mod.ClassName~="ModuleScript" then continue end
-
-		local bypass=mod:Clone()
-		local finalModule=bypass:FindFirstChildWhichIsA("ModuleScript",true)
+		local finalModule=mod:FindFirstChildWhichIsA("ModuleScript",true)
 
 		if finalModule==nil then
 			print("Failed to unwrap",mod.Name,"looks like it is not a bypassed module!")
-			pcall(destroy,bypass)
 			continue
 		end
 
+		finalModule=finalModule:Clone()
 		finalModule.Parent=createUnwrappedFolder()
 		table.insert(toSet,finalModule)
 		print("Successfully unwrapped",mod.Name,finalModule.Name)
-		
-		pcall(destroy,bypass)
 	end
 
 	if #toSet<1 then
