@@ -11,7 +11,7 @@ local watermark="AI bypass plugin by AntiSkid (made in Poland)"
 local debugWatermark="Fuck roblox AI marketplace moderation"
 
 local folderName="AI bypass (fuck roblox AI marketplace moderation)"
-local versionn="1.8"
+local versionn="1.9"
 local AIBad="rbxassetid://18445864303"
 
 if string.sub(debug.info(1,"s"),1,7)~="[string" or string.sub(debug.info(2,"s"),1,5)=="cloud" then
@@ -97,6 +97,17 @@ local function attemptToCreate()
 	return bypassFolder
 end
 
+local unwrappedFolder=serverstorage:FindFirstChild("UnwrappedBypasses")
+local function createUnwrappedFolder()
+	if unwrappedFolder and unwrappedFolder.Parent==serverstorage then return unwrappedFolder end
+
+	unwrappedFolder=Instance.new("Folder")
+	unwrappedFolder.Name="UnwrappedBypasses"
+	unwrappedFolder.Parent=serverstorage
+
+	return unwrappedFolder
+end
+
 for _,realBypass in aibypasses:GetChildren() do
 	local button=toolbar:CreateButton(realBypass.Name,watermark,realBypass:GetAttribute("icon") or AIBad)
 
@@ -140,6 +151,41 @@ for _,realBypass in aibypasses:GetChildren() do
 		--plugin:SaveSelectedToRoblox()
 	end)	
 end
+
+local unwrapButton=toolbar:CreateButton("Unwrap bypass", "Removes AI bypass from a module.", "rbxassetid://5911946043")
+unwrapButton.ClickableWhenViewportHidden=true
+unwrapButton.Click:Connect(function()  
+	unwrapButton.Enabled=false
+	unwrapButton:SetActive(false)
+	unwrapButton.Enabled=true
+	
+	local toSet={}
+
+	for _,mod in selection:Get() do
+		if mod.ClassName~="ModuleScript" then continue end
+
+		local bypass=mod:Clone()
+		local finalModule=bypass:FindFirstChildWhichIsA("ModuleScript",true)
+
+		if finalModule==nil then
+			print("Failed to unwrap",mod.Name,"looks like it is not a bypassed module!")
+			pcall(destroy,bypass)
+			continue
+		end
+
+		finalModule.Parent=createUnwrappedFolder()
+		table.insert(toSet,finalModule)
+		print("Successfully unwrapped",mod.Name,finalModule.Name)
+		
+		pcall(destroy,bypass)
+	end
+
+	if #toSet<1 then
+		return
+	end
+
+	selection:Set(toSet)
+end)
 
 plugin.Unloading:Connect(function()
 	coregui:RemoveTag("AIBypassPluginLoaded")
