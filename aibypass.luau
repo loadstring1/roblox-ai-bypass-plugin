@@ -22,6 +22,7 @@ else
 	versionn=`{versionn}_official`
 end
 
+local pluginSettings=plugin:GetSetting("settings_aipluginbypass")
 local toolbar=plugin:CreateToolbar(watermark)
 local selection=game:GetService("Selection")
 local serverstorage=game:GetService("ServerStorage")
@@ -70,18 +71,39 @@ end
 pcall(game.BindToClose,game,closePlugin)
 print(`Loading container - {debugWatermark}`)
 
+if typeof(pluginSettings)~="table" then
+    plugin:SetSetting("settings_aipluginbypass",{
+        data={},
+        offlineMode=false,
+		lastVersion=versionn,
+    })
+    pluginSettings=plugin:GetSetting("settings_aipluginbypass")
+end
+
+if pluginSettings.lastVersion~="first_run" and pluginSettings.lastVersion~=versionn then
+	print(`Plugin updated from {pluginSettings.lastVersion} to {versionn} successfully! Container cache cleared.`)
+	pluginSettings.data.bypassContainer=nil
+end
+
+if pluginSettings.lastVersion~=versionn then
+	pluginSettings.lastVersion=versionn
+	plugin:SetSetting("settings_aipluginbypass",pluginSettings)
+end
+
 success,loaded=pcall(function()
 	local encodingservice=game:GetService("EncodingService")
-	local fetched=plugin:GetSetting("bypassContainer")
-	
-	if typeof(fetched)~="table" or typeof(fetched)=="table" and fetched.offlineMode~=true and typeof(fetched.lastFetch)=="number" and os.clock()-fetched.lastFetch>86400 then
+	local fetched=pluginSettings.data.bypassContainer
+
+	if typeof(fetched)~="table" or typeof(fetched)=="table" and pluginSettings.offlineMode~=true and typeof(fetched.lastFetch)=="number" and os.clock()-fetched.lastFetch>86400 then
 		print("Bypass is loading from github repo - this might take some time if your internet connection is slow")
 		fetched={
 			bypass=buffer.fromstring(
 				game:GetService("HttpService"):RequestAsync({Url="https://github.com/loadstring1/roblox-ai-bypass-plugin/raw/refs/heads/main/container.rbxm",Method="GET"}).Body
 			)
 		}
-		plugin:SetSetting("bypassContainer",{lastFetch=os.clock(),bypass=buffer.tostring(encodingservice:Base64Encode(fetched.bypass))})
+		local bypassToSet={lastFetch=os.clock(),bypass=buffer.tostring(encodingservice:Base64Encode(fetched.bypass))}
+		pluginSettings.data.bypassContainer=bypassToSet
+		plugin:SetSetting("settings_aipluginbypass",pluginSettings)
 	end
 	
 	return game:GetService("SerializationService"):DeserializeInstancesAsync(
@@ -193,38 +215,30 @@ end)
 
 local clearCache=toolbar:CreateButton("Clear cache", "Clears cache for bypasses", "rbxassetid://77395188959040")
 buttonHandler(clearCache, function()
-	plugin:SetSetting("bypassScript",nil)
-	plugin:SetSetting("bypassContainer",nil)
-	print("Cache cleared! You must reopen this place file/reopen this team create session again to apply full changes")
+	table.clear(pluginSettings.data)
+	pluginSettings.offlineMode=false
+	plugin:SetSetting("settings_aipluginbypass",pluginSettings)
+	print("Cache cleared and offline mode disabled! You must reopen this place file/reopen this team create session again to apply full changes")
 end)
 
-local isOffline=false
+local isOffline=pluginSettings.offlineMode
 local wifiIcons={
 	[false]="rbxassetid://105127187178989", --wifi enabled (offlineMode false)
 	[true]="rbxassetid://90593114212596" --wifi disabled (offlineMode true)
 }
 
-if typeof(plugin:GetSetting("bypassScript"))=="table"
-	and plugin:GetSetting("bypassScript").offlineMode
-	and typeof(plugin:GetSetting("bypassContainer"))=="table"
-	and plugin:GetSetting("bypassContainer").offlineMode then
-	isOffline=true
-end
-
 local offlineMode=toolbar:CreateButton("Offline mode", "Allows the plugin to run without wifi.", wifiIcons[isOffline])
 
 buttonHandler(offlineMode, function()  
-	local bypassScript=plugin:GetSetting("bypassScript")
-	local bypassContainer=plugin:GetSetting("bypassContainer")
+	local bypassScript=pluginSettings.data.bypassScript
+	local bypassContainer=pluginSettings.data.bypassContainer
 
 	isOffline=not isOffline
 	if typeof(bypassScript)=="table" and typeof(bypassContainer)=="table" then
-		bypassScript.offlineMode=isOffline
-		bypassContainer.offlineMode=isOffline
+		pluginSettings.offlineMode=isOffline
 		offlineMode.Icon=wifiIcons[isOffline]
 
-		plugin:SetSetting("bypassScript",bypassScript)
-		plugin:SetSetting("bypassContainer",bypassContainer)
+		plugin:SetSetting("settings_aipluginbypass",pluginSettings)
 
 		print(`{isOffline and "Enabled offline mode successfully! AI bypass plugin will work without wifi - WARNING: PLUGIN WONT AUTO UPDATE NOW" 
 			or "Disabled offline mode successfully! AI bypass plugin now requires wifi to work - plugin will auto update now"}`)
