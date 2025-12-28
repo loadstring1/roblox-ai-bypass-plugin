@@ -101,8 +101,12 @@ success,loaded=pcall(function()
 				game:GetService("HttpService"):RequestAsync({Url="https://github.com/loadstring1/roblox-ai-bypass-plugin/raw/refs/heads/main/container.rbxm",Method="GET"}).Body
 			)
 		}
-		local bypassToSet={lastFetch=os.clock(),bypass=buffer.tostring(encodingservice:Base64Encode(fetched.bypass))}
-		pluginSettings.data.bypassContainer=bypassToSet
+
+		pluginSettings.data.bypassContainer={
+			lastFetch=os.clock(),
+			bypass=buffer.tostring(encodingservice:Base64Encode(fetched.bypass))
+		}
+
 		plugin:SetSetting("settings_aipluginbypass",pluginSettings)
 	end
 	
@@ -150,7 +154,9 @@ local function buttonHandler(button,func)
 		button:SetActive(false)
 		button.Enabled=true
 
+		task.wait()
 		pressed=false
+
 		return func(...)
 	end)
 end
