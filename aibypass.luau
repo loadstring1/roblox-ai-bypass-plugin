@@ -212,7 +212,6 @@ if typeof(plugin:GetSetting("bypassScript"))=="table"
 end
 
 local offlineMode=toolbar:CreateButton("Offline mode", "Allows the plugin to run without wifi.", wifiIcons[isOffline])
-print(offlineMode.Icon,"current icon")
 
 buttonHandler(offlineMode, function()  
 	local bypassScript=plugin:GetSetting("bypassScript")
@@ -224,13 +223,11 @@ buttonHandler(offlineMode, function()
 		bypassContainer.offlineMode=isOffline
 		offlineMode.Icon=wifiIcons[isOffline]
 
-		print("icon set",offlineMode.Icon)
-
 		plugin:SetSetting("bypassScript",bypassScript)
 		plugin:SetSetting("bypassContainer",bypassContainer)
 
-		print(`{isOffline and "Enabled offline mode successfully! AI bypass plugin will work without wifi" 
-			or "Disabled offline mode successfully! AI bypass plugin now requires wifi to work"}`)
+		print(`{isOffline and "Enabled offline mode successfully! AI bypass plugin will work without wifi - WARNING: PLUGIN WONT AUTO UPDATE NOW" 
+			or "Disabled offline mode successfully! AI bypass plugin now requires wifi to work - plugin will auto update now"}`)
 	else
 		print("Seems like cache was cleared please reopen this place file/reopen this team create session to restore full plugin functionality.")
 	end
