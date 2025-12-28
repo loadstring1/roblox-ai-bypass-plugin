@@ -222,7 +222,7 @@ buttonHandler(offlineMode, function(...)
 	if typeof(bypassScript)=="table" and typeof(bypassContainer)=="table" then
 		bypassScript.offlineMode=isOffline
 		bypassContainer.offlineMode=isOffline
-		offlineMode.Icon=wifiIcons[offlineMode]
+		offlineMode.Icon=wifiIcons[isOffline]
 
 		print("icon set",offlineMode.Icon)
 
