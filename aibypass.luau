@@ -206,7 +206,7 @@ local wifiIcons={
 
 if typeof(plugin:GetSetting("bypassScript"))=="table"
 	and plugin:GetSetting("bypassScript").offlineMode
-	and typeof(plugin:GetSetting("bypassContainer"))=="table"
+	or typeof(plugin:GetSetting("bypassContainer"))=="table"
 	and plugin:GetSetting("bypassContainer").offlineMode then
 	isOffline=true
 end
@@ -214,7 +214,7 @@ end
 local offlineMode=toolbar:CreateButton("Offline mode", "Allows the plugin to run without wifi.", wifiIcons[isOffline])
 print(offlineMode.Icon,"current icon")
 
-buttonHandler(offlineMode, function(...)  
+buttonHandler(offlineMode, function()  
 	local bypassScript=plugin:GetSetting("bypassScript")
 	local bypassContainer=plugin:GetSetting("bypassContainer")
 
