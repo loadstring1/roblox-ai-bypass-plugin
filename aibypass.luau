@@ -206,7 +206,7 @@ local wifiIcons={
 
 if typeof(plugin:GetSetting("bypassScript"))=="table"
 	and plugin:GetSetting("bypassScript").offlineMode
-	or typeof(plugin:GetSetting("bypassContainer"))=="table"
+	and typeof(plugin:GetSetting("bypassContainer"))=="table"
 	and plugin:GetSetting("bypassContainer").offlineMode then
 	isOffline=true
 end
