@@ -139,12 +139,18 @@ local bypassFolderRefit=folderHandler(bypassFolderName, serverstorage)
 local unwrappedFolderRefit=folderHandler("UnwrappedBypasses", serverstorage)
 
 local function buttonHandler(button,func)
+	local pressed=false
+
 	button.ClickableWhenViewportHidden=true
 	button.Click:Connect(function(...)
+		if pressed then return end
+		pressed=true 
+
 		button.Enabled=false
 		button:SetActive(false)
 		button.Enabled=true
 
+		pressed=false
 		return func(...)
 	end)
 end
