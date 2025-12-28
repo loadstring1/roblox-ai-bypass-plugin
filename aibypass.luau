@@ -219,8 +219,8 @@ local wifiIcons={
 	[true]="rbxassetid://90593114212596" --wifi disabled (offlineMode true)
 }
 
-local offlineMode=toolbar:CreateButton("Offline mode", "Allows the plugin to run without wifi.", wifiIcons[isOffline])
 local clearCache=toolbar:CreateButton("Clear cache", "Clears cache for bypasses", "rbxassetid://77395188959040")
+local offlineMode=toolbar:CreateButton("Offline mode", "Allows the plugin to run without wifi.", wifiIcons[isOffline])
 
 buttonHandler(clearCache, function()
 	table.clear(pluginSettings.data)
