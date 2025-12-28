@@ -152,9 +152,11 @@ local function buttonHandler(button,func)
 
 		button.Enabled=false
 		button:SetActive(false)
-		button.Enabled=true
 
 		task.wait()
+		button.Enabled=true
+		button:SetActive(true)
+	
 		pressed=false
 
 		return func(...)
