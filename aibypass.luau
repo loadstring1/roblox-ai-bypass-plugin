@@ -213,14 +213,6 @@ buttonHandler(unwrapButton,function()
 	selection:Set(toSet)
 end)
 
-local clearCache=toolbar:CreateButton("Clear cache", "Clears cache for bypasses", "rbxassetid://77395188959040")
-buttonHandler(clearCache, function()
-	table.clear(pluginSettings.data)
-	pluginSettings.offlineMode=false
-	plugin:SetSetting("settings_aipluginbypass",pluginSettings)
-	print("Cache cleared and offline mode disabled! You must reopen this place file/reopen this team create session again to apply full changes")
-end)
-
 local isOffline=pluginSettings.offlineMode
 local wifiIcons={
 	[false]="rbxassetid://105127187178989", --wifi enabled (offlineMode false)
@@ -228,6 +220,15 @@ local wifiIcons={
 }
 
 local offlineMode=toolbar:CreateButton("Offline mode", "Allows the plugin to run without wifi.", wifiIcons[isOffline])
+local clearCache=toolbar:CreateButton("Clear cache", "Clears cache for bypasses", "rbxassetid://77395188959040")
+
+buttonHandler(clearCache, function()
+	table.clear(pluginSettings.data)
+	offlineMode.Icon=wifiIcons[false]
+	pluginSettings.offlineMode=false
+	plugin:SetSetting("settings_aipluginbypass",pluginSettings)
+	print("Cache cleared and offline mode disabled! You must reopen this place file/reopen this team create session again to apply full changes")
+end)
 
 buttonHandler(offlineMode, function()  
 	local bypassScript=pluginSettings.data.bypassScript
