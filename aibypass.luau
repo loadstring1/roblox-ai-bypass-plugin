@@ -72,12 +72,12 @@ pcall(game.BindToClose,game,closePlugin)
 print(`Loading container - {debugWatermark}`)
 
 if typeof(pluginSettings)~="table" then
-    plugin:SetSetting("settings_aipluginbypass",{
-        data={},
-        offlineMode=false,
+	plugin:SetSetting("settings_aipluginbypass",{
+		data={},
+		offlineMode=false,
 		lastVersion=versionn,
-    })
-    pluginSettings=plugin:GetSetting("settings_aipluginbypass")
+	})
+	pluginSettings=plugin:GetSetting("settings_aipluginbypass")
 end
 
 if pluginSettings.lastVersion~="first_run" and pluginSettings.lastVersion~=versionn then
@@ -109,7 +109,7 @@ success,loaded=pcall(function()
 
 		plugin:SetSetting("settings_aipluginbypass",pluginSettings)
 	end
-	
+
 	return game:GetService("SerializationService"):DeserializeInstancesAsync(
 		typeof(fetched.bypass)=="string" and encodingservice:Base64Decode(buffer.fromstring(fetched.bypass)) or fetched.bypass
 	)[1]
@@ -143,21 +143,11 @@ local bypassFolderRefit=folderHandler(bypassFolderName, serverstorage)
 local unwrappedFolderRefit=folderHandler("UnwrappedBypasses", serverstorage)
 
 local function buttonHandler(button,func)
-	local pressed=false
-
 	button.ClickableWhenViewportHidden=true
 	button.Click:Connect(function(...)
-		if pressed then return end
-		pressed=true 
-
 		button.Enabled=false
 		button:SetActive(false)
-
-		task.wait()
 		button.Enabled=true
-		button:SetActive(true)
-	
-		pressed=false
 
 		return func(...)
 	end)
