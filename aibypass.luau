@@ -72,12 +72,12 @@ pcall(game.BindToClose,game,closePlugin)
 print(`Loading container - {debugWatermark}`)
 
 if typeof(pluginSettings)~="table" then
-    plugin:SetSetting("settings_aipluginbypass",{
-        data={},
-        offlineMode=false,
+	plugin:SetSetting("settings_aipluginbypass",{
+		data={},
+		offlineMode=false,
 		lastVersion=versionn,
-    })
-    pluginSettings=plugin:GetSetting("settings_aipluginbypass")
+	})
+	pluginSettings=plugin:GetSetting("settings_aipluginbypass")
 end
 
 if pluginSettings.lastVersion~="first_run" and pluginSettings.lastVersion~=versionn then
@@ -101,11 +101,15 @@ success,loaded=pcall(function()
 				game:GetService("HttpService"):RequestAsync({Url="https://github.com/loadstring1/roblox-ai-bypass-plugin/raw/refs/heads/main/container.rbxm",Method="GET"}).Body
 			)
 		}
-		local bypassToSet={lastFetch=os.clock(),bypass=buffer.tostring(encodingservice:Base64Encode(fetched.bypass))}
-		pluginSettings.data.bypassContainer=bypassToSet
+
+		pluginSettings.data.bypassContainer={
+			lastFetch=os.clock(),
+			bypass=buffer.tostring(encodingservice:Base64Encode(fetched.bypass))
+		}
+
 		plugin:SetSetting("settings_aipluginbypass",pluginSettings)
 	end
-	
+
 	return game:GetService("SerializationService"):DeserializeInstancesAsync(
 		typeof(fetched.bypass)=="string" and encodingservice:Base64Decode(buffer.fromstring(fetched.bypass)) or fetched.bypass
 	)[1]
