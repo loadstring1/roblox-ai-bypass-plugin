@@ -258,3 +258,4 @@ plugin.Unloading:Connect(function()
 end)
 
 print(`Loaded successfully - {debugWatermark} (version {versionn})`)
+warn("warning: roblox released some slop update that breaks new modules and they cannot be required in-game even without bypass\nThis was reported before by memerman on devforum but knowing this multi bilion dollar company is so shit they probably reverted the fix by accident")
